@@ -1,0 +1,12 @@
+body{font-family: Arial, sans-serif;margin:20px}
+.pdp{display:flex;gap:20px}
+.media img{width:320px;height:auto;border:1px solid #ddd}
+.info{max-width:520px}
+.price{font-size:20px;color:#b12704}
+.stock{color:green}
+.error{color:red}
+.qty input{width:60px}
+button{background:#0070f3;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer}
+button:disabled{opacity:0.5;cursor:not-allowed}
+.cart{margin-top:10px}
+.desc{margin-top:20px}
