@@ -1,7 +1,17 @@
-const mock = {
+type SKU = { id: string; attrs: string[]; price: number; stock: number }
+type Product = {
+  id: number
+  name: string
+  image: string
+  description: string
+  dimensions: { name: string }[]
+  skus: SKU[]
+}
+
+const mock: Product = {
   id: 1,
   name: 'Demo Product',
-  image: 'https://via.placeholder.com/400',
+  image: 'https://placehold.in/768x1000.jpeg/dark',
   description: 'This is a demo product used for the PDP coding test.',
   dimensions: [ { name: 'Color' }, { name: 'Size' } ],
   skus: [
@@ -11,12 +21,12 @@ const mock = {
   ]
 }
 
-export async function fetchProduct(){
+export async function fetchProduct(): Promise<Product>{
   await new Promise(r=>setTimeout(r,300))
   return mock
 }
 
-export async function addToCart({sku, qty}){
+export async function addToCart({sku, qty}:{sku:string, qty:number}){
   await new Promise(r=>setTimeout(r,200))
   if(Math.random() < 0.1) throw new Error('random fail')
   return { ok: true }

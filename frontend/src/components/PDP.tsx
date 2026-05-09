@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { fetchProduct, addToCart } from '../mockApi'
 
-export default function PDP(){
-  const [product, setProduct] = useState(null)
+type SKU = { id: string; attrs: string[]; price: number; stock: number }
+type Product = {
+  id: number
+  name: string
+  image: string
+  description: string
+  dimensions: { name: string }[]
+  skus: SKU[]
+}
+
+export default function PDP(): JSX.Element{
+  const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [variant, setVariant] = useState(null)
-  const [qty, setQty] = useState(1)
-  const [cartCount, setCartCount] = useState(0)
-  const [adding, setAdding] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [variant, setVariant] = useState<string | null>(null)
+  const [qty, setQty] = useState<number>(1)
+  const [cartCount, setCartCount] = useState<number>(0)
+  const [adding, setAdding] = useState<boolean>(false)
 
   useEffect(()=>{
     const load = async ()=>{
@@ -26,9 +36,9 @@ export default function PDP(){
 
   if(loading) return <div className="pdp">Loading...</div>
   if(error) return <div className="pdp error">{error}</div>
-  if(!product) return null
+  if(!product) return <div />
 
-  const selectedSku = product.skus.find(s=>s.id===variant)
+  const selectedSku = product.skus.find(s=>s.id===variant) as SKU
   const inStock = selectedSku.stock > 0
 
   const handleAdd = async ()=>{
@@ -61,7 +71,7 @@ export default function PDP(){
           {product.dimensions.map(dim=> (
             <div key={dim.name} className="dim">
               <label>{dim.name}</label>
-              <select onChange={e=>setVariant(e.target.value)} value={variant}>
+              <select onChange={(e)=>setVariant(e.target.value)} value={variant || ''}>
                 {product.skus.map(s=> (
                   <option key={s.id} value={s.id}>{s.attrs.join(' / ')}</option>
                 ))}
@@ -72,7 +82,7 @@ export default function PDP(){
 
         <div className="qty">
           <label>Qty</label>
-          <input type="number" min="1" max={selectedSku.stock} value={qty} onChange={e=>setQty(Number(e.target.value))} />
+          <input type="number" min={1} max={selectedSku.stock} value={qty} onChange={e=>setQty(Number(e.target.value))} />
         </div>
 
         <button disabled={!inStock || adding} onClick={handleAdd}>{adding? 'Adding...':'Add to cart'}</button>
